@@ -1,0 +1,7 @@
+import ibm_db
+##conn = ibm_db.connect("SDMRUP","kthala35","YX#q-w\5*8I+Rg#P")
+conn = ibm_db.connect("database=SDMRUP;hostname=siwb.boulder.ibm.com;port=64200;protocol=tcpip;uid=kthala35;pwd=YX#q-w\\5*8I+Rg#P",'','')
+stmt = ibm_db.exec_immediate(conn, "select count(*) from GBSPMART.GUPP_IOT_GEO")
+ibm_db.fetch_row(stmt)
+print "count : ",  ibm_db.result(stmt,0)
+
