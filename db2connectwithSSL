@@ -1,0 +1,33 @@
+#!/usr/bin/python
+import ibm_db
+import os
+
+print("Starting")
+print(os.environ['DB']);
+print(os.environ['SERVER']);
+print(os.environ['PORT']);
+print(os.environ['USER']);
+print(os.environ['PW']);
+print(os.environ['DDL_FILE']);
+
+con_string="database="+os.environ['DB']+";Security=ssl;sslTrustStoreLocation=/mnt/ibmca-truststore.jks;sslTrustStorePassword=nopassword;hostname="+os.environ['SERVER']+";port="+os.environ['PORT']+";protocol=tcpip;uid="+os.environ['USER']+";pwd="+os.environ['PW']
+
+print(con_string);
+try:
+ conn = ibm_db.connect(con_string,'','')
+except:     
+    print("no connection:", ibm_db.conn_errormsg())
+else:
+    print("The connection was successful")
+
+#SQL="SELECT COUNT(*) From SYSCAT.TABLES;"
+sql_file1 = open(os.environ['DDL_FILE'], 'r')
+Lines = sql_file1.readlines()
+for SQL in Lines: 
+ try:
+  stmt = ibm_db.exec_immediate(conn, SQL)
+ except:     
+   print(SQL , "Transaction couldn't be completed:" , ibm_db.stmt_errormsg())
+ else:
+   print(SQL , "Transaction complete.")
+ #print(ibm_db.num_rows(stmt))
